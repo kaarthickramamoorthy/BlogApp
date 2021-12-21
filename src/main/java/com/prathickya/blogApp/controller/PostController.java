@@ -1,12 +1,12 @@
 package com.prathickya.blogApp.controller;
 
 import com.prathickya.blogApp.dto.PostDto;
+import com.prathickya.blogApp.payload.PostResponse;
 import com.prathickya.blogApp.service.PostService;
+import com.prathickya.blogApp.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -25,8 +25,13 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDto> getAllPosts() {
-        return postService.getAllPosts();
+    public PostResponse getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY_COLUMN, required = false) String sortBy,
+            @RequestParam(value = "sortByOrder", defaultValue = AppConstants.DEFAULT_SORTING_ORDER, required = false) String sortOrder
+    ) {
+        return postService.getAllPosts(pageNo, pageSize, sortBy, sortOrder);
     }
 
     @GetMapping("/{id}")
