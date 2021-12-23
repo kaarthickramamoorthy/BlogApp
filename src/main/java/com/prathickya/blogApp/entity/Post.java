@@ -1,7 +1,9 @@
 package com.prathickya.blogApp.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -23,6 +25,12 @@ public class Post {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    //Post is owning the relationship - so mappedBy
+    //cascade ALL - Whenever parent gets remove, merge, refresh - child will be also removed,merged,refreshed
+    //Orphan removal - when parent  gets removed - child will also be removed
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 
     //Hibernate expects this no-arg constructor
     public Post() {
@@ -64,6 +72,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
