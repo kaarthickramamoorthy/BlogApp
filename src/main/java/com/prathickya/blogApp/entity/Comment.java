@@ -1,5 +1,7 @@
 package com.prathickya.blogApp.entity;
 
+import com.prathickya.blogApp.dto.CommentDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -27,6 +29,13 @@ public class Comment {
         this.name = name;
         this.email = email;
         this.body = body;
+    }
+
+    public Comment(String name, String email, String body, Post post) {
+        this.name = name;
+        this.email = email;
+        this.body = body;
+        this.post = post;
     }
 
     public long getId() {
@@ -67,6 +76,10 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public static Comment getComment(CommentDto commentDto) {
+        return new Comment(commentDto.getName(), commentDto.getEmail(), commentDto.getBody());
     }
 
     @Override
