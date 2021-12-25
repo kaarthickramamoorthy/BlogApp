@@ -6,6 +6,7 @@ import com.prathickya.blogApp.exception.ResourceNotFoundException;
 import com.prathickya.blogApp.payload.PostResponse;
 import com.prathickya.blogApp.repository.PostRepository;
 import com.prathickya.blogApp.service.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,11 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    private final ModelMapper modelMapper;
+
+    public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper) {
         this.postRepository = postRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -57,7 +61,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto getPostById(long id) {
         Post postEntity = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("POST", "id", id + ""));
-        return new PostDto(postEntity.getId(), postEntity.getTitle(), postEntity.getDescription(), postEntity.getContent());
+        return convertEntityToDto(postEntity);
     }
 
     @Override
@@ -76,11 +80,14 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostDto convertEntityToDto(Post savedPost) {
-        PostDto responseDto = new PostDto();
-        responseDto.setId(savedPost.getId());
-        responseDto.setTitle(savedPost.getTitle());
-        responseDto.setDescription(savedPost.getDescription());
-        responseDto.setContent(savedPost.getContent());
-        return responseDto;
+        /*
+            Below code has been replaced by model mapper
+            PostDto responseDto = new PostDto();
+            responseDto.setId(savedPost.getId());
+            responseDto.setTitle(savedPost.getTitle());
+            responseDto.setDescription(savedPost.getDescription());
+            responseDto.setContent(savedPost.getContent());
+         */
+        return modelMapper.map(savedPost, PostDto.class);
     }
 }

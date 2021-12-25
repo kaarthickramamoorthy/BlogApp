@@ -1,8 +1,9 @@
 package com.prathickya.blogApp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.prathickya.blogApp.entity.Comment;
+import lombok.*;
+
+import java.util.Set;
 
 //DTO - Data Transfer Object
 //Frequently used Design pattern to pass the data (multiple parameters) between Client Front-End/Server Back-End
@@ -13,11 +14,12 @@ import lombok.NoArgsConstructor;
 //Best practice is to send DTO instead of exposing entities to client. Need to send what is actually required to client
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class PostDto {
     private long id;
     private String title;
     private String description;
     private String content;
+    private Set<CommentDto> comments;
 }
