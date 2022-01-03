@@ -2,7 +2,7 @@
 
 Spring Security
 - If you just add the spring-boot-security-starter dependency, 
-  it generates the default user as user and generates the random password (and also logs it) each time
+  it generates the default user as user and generates the random password (and also logs it) each time and put the application (all exposed URLs) behind form based authentication.
 - By default, Spring security protects (enables security) all the URLs in the application. We need to whitelist certain URLs.
 - Add logging level to DEBUG for org.springframework.security in application.properties.
 - user/random generated password + all exposed URLs are secured by default
@@ -23,12 +23,21 @@ Basic Authentication
 - By default, Spring uses Form based Authentication and it prompts a /login page when we try to access any endpoint
 - This form based authentication is useful (belong to) only in web applications
 - We will see how **to enable Basic authentication to secure our endpoints**
-
-Form Based authentication
-
 - Add a Config class that extends WebSecurityConfigurerAdapter & override configure(httpSecurity) method
 - In Basic authentication, when user tries to access any endpoint through browser, it will popup a window instead of redirecting to /login page
-- If accessed through Postman, add Authorization as Basic and add username & password
+- If accessed through Postman, choose Authorization as Basic and add username & password
 - Postman adds encoded string in Header section (Authorization Basic <Base64 encoded>)
 - The authorization header will be automatically generated when you send the request
 - Disadvantage of Basic authentication is, we have to send Authorization header in every request
+
+So far username and password is used from the application.properties file for both Form and Basic Authentication. Now we will see how to use InMemory authentication
+with couple of users
+
+**In Memory Authentication**
+
+Removed user configuration from application.properties file
+Provided implementation for UserDetails interface - InMemoryUserDetailsManager as the implementation (Added 2 users in WebSecurityConfigurerAdapter)
+added antMatcher to permit all GET requests
+Added EnableMethodLevelSecurity annotation to enable only Admin users to access POST, PUT , DELETE by adding @PreAuthorize("hasRole('ADMIN'))
+Added passwordEncoder 
+
