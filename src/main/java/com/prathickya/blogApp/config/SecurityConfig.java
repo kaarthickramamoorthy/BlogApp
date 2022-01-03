@@ -3,6 +3,7 @@ package com.prathickya.blogApp.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -50,4 +51,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final UserDetails admin = User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("ADMIN").build();
         return new InMemoryUserDetailsManager(kaarthick, admin);
     }
+
+    /*
+    Another way of doing inMemoryAuthentication
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception { //override authentication
+            auth.inMemoryAuthentication()
+                    .withUser(User.builder().username("kaarthick").password(passwordEncoder().encode("kaarthick")).roles("USER").build());
+            auth.inMemoryAuthentication()
+                    .withUser(User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("ADMIN").build());
+
+        }
+    */
 }
